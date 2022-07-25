@@ -1,18 +1,20 @@
 /**
  * @name ConfigMockPlugin
  * @description 引入mockjs，本地模拟接口
+ * https://github.com/anncwb/vite-plugin-mock
  */
-import { viteMockServe } from 'vite-plugin-mock';
-export const ConfigMockPlugin = (isBuild: boolean) => {
+
+import { viteMockServe } from 'vite-plugin-mock'
+
+export function configMockPlugin(isBuild: boolean) {
   return viteMockServe({
-    ignore: /^\_/,
+    ignore: /^_/,
     mockPath: 'mock',
     localEnabled: !isBuild,
-    prodEnabled: isBuild, //实际开发请关闭，会影响打包体积
-    // https://github.com/anncwb/vite-plugin-mock/issues/9
+    prodEnabled: isBuild,
     injectCode: `
-       import { setupProdMockServer } from '../mock/_createProdMockServer';
-       setupProdMockServer();
-       `,
-  });
-};
+         import { setupProdMockServer } from '../mock/_createProductionServer';
+         setupProdMockServer();
+         `
+  })
+}

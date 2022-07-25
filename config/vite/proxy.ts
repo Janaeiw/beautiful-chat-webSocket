@@ -1,15 +1,18 @@
-export function createProxy() {
+/**
+ * @name createProxy
+ * @description vite-api代理配置
+ * @param viteEnv
+ * https://vitejs.cn/config/#build-lib
+ */
+
+export function createProxy(viteEnv: any) {
+  const { VITE_API_BASE_URL, VITE_API_TARGET_URL } = viteEnv;
+
   return {
-    // 选项写法
-    '/webapi': {
-      // target: 'https://testnew.wisight.cn/webapi',
-      target: 'http://192.168.3.121:9999',
+    [VITE_API_BASE_URL]: {
+      target: VITE_API_TARGET_URL,
       changeOrigin: true,
-      configure: (proxy: any, _options: any) => {
-        proxy.on('proxyReq', function (_proxyReq: any, _req: any, _res: any, _options: any) {
-        });
-      },
-      rewrite: (path: any) => path.replace(/^\/webapi/, '')
+      rewrite: (path: any) => path.replace(new RegExp(`^${VITE_API_BASE_URL}`), ''),
     },
-  }
+  };
 }

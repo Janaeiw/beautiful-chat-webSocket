@@ -9,7 +9,7 @@ import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import { ConfigSvgIconsPlugin } from './svgIcons';
 import { AutoRegistryComponents } from './component';
 import { AutoImportDeps } from './autoImport';
-import { ConfigMockPlugin } from './mock';
+import { configMockPlugin } from './mock';
 import { ConfigCompressPlugin } from './compress';
 import { ConfigPagesPlugin } from './pages';
 import { ConfigRestartPlugin } from './restart';
@@ -57,7 +57,7 @@ export function createVitePlugins(isBuild: boolean) {
   vitePlugins.push(ConfigVisualizerConfig());
 
   // vite-plugin-mock
-  vitePlugins.push(ConfigMockPlugin(isBuild));
+  vitePlugins.push(configMockPlugin(isBuild));
 
   if (isBuild) {
     // vite-plugin-imagemin
