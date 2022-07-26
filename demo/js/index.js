@@ -1,9 +1,9 @@
 /*
  * @Author: Janaeiw
  * @Date: 2022/07/06 13:49
- * @LastEditTime: 2022/07/25 15:28
+ * @LastEditTime: 2022/07/26 10:12
  * @LastEditors: Janaeiw
- * @FilePath: \wichat\public\demo\js\index.js
+ * @FilePath: \beautiful-chat-webSocket\public\demo\js\index.js
  * @Description: 'wichat-jssdk'
  */
 
@@ -76,7 +76,7 @@ function makeWiLauncher() {
 function makeWiIframe() {
   let iframe = document.createElement('iframe');
   iframe.className = 'wi-iframe animated fadeInUp';
-  iframe.src = 'http://192.168.3.157:3000/#/home';
+  iframe.src = 'https://janaeiw.github.io/beautiful-chat-webSocket/#/home';
   document.body.appendChild(iframe);
   AddEventListener(function (res) {
     const { operate } = res;
