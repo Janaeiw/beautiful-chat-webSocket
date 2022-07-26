@@ -1,15 +1,15 @@
 <!--
  * @Author: ZhongJunWei
  * @Date: 2022/06/30 14:08
- * @LastEditTime: 2022/07/25 15:28
+ * @LastEditTime: 2022/07/26 16:13
  * @LastEditors: Janaeiw
- * @FilePath: \wichat\src\views\launcher\index.vue
+ * @FilePath: \beautiful-chat-webSocket\src\views\launcher\index.vue
  * @Description: '启动器'
 -->
 
 <template>
   <div class="Container">
-    <div v-if="isShowLauncher" class="wi-launcher" id="ball">
+    <div v-if="isShowLauncher" class="wi-launcher">
       <van-icon v-if="isOpen" class="wi-close-icon" name="cross" @click="closeChat" />
       <van-icon v-else class="wi-open-icon" name="chat-o" @click="openChat" />
     </div>

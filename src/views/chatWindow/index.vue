@@ -1,7 +1,7 @@
 <!--
  * @Author: ZhongJunWei
  * @Date: 2022/06/30 18:10
- * @LastEditTime: 2022/07/26 10:54
+ * @LastEditTime: 2022/07/26 16:13
  * @LastEditors: Janaeiw
  * @FilePath: \beautiful-chat-webSocket\src\views\chatWindow\index.vue
  * @Description: '聊天窗口'

@@ -1,7 +1,9 @@
 <template>
   <div class="Container">
-    <van-button type="primary" @click="handleAa">测试代理</van-button>
-    <van-button type="primary" @click="handleLogin">登 录</van-button>
+    <template v-if="envMode == 'development'">
+      <van-button type="primary" @click="handleAa">测试代理</van-button>
+      <van-button type="primary" @click="handleLogin">登 录</van-button>
+    </template>
     <Launcher />
   </div>
 </template>
@@ -12,6 +14,7 @@
   import { login } from '/@/api/index';
 
   // const router = useRouter();
+  const envMode = import.meta.env.MODE;
   const userStore = useUserStore();
 
   onBeforeMount(() => {});
