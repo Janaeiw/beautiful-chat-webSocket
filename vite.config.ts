@@ -2,9 +2,17 @@ import { createVitePlugins } from './config/vite/plugins';
 import { resolve } from 'path';
 import { ConfigEnv, UserConfigExport, loadEnv } from 'vite';
 import { wrapperEnv } from './config/utils';
+import pkg from './package.json';
+import dayjs from 'dayjs';
 import { createProxy } from './config/vite/proxy';
 import { createBuild } from './config/vite/build';
 
+const { dependencies, devDependencies, name, version } = pkg;
+// 应用信息
+const __APP_INFO__ = {
+  pkg: { dependencies, devDependencies, name, version },
+  lastBuildTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+};
 
 const pathResolve = (dir: string) => {
   return resolve(process.cwd(), '.', dir);
@@ -12,7 +20,6 @@ const pathResolve = (dir: string) => {
 
 // https://vitejs.dev/config/
 export default function ({ command, mode }: ConfigEnv): UserConfigExport {
-
   const isProduction = command === 'build';
   const root = process.cwd();
   const env = loadEnv(mode, root); // 加载env环境
@@ -22,10 +29,14 @@ export default function ({ command, mode }: ConfigEnv): UserConfigExport {
   const { VITE_PUBLIC_PATH } = viteEnv;
 
   return {
-    root,
+    root: root,
     base: VITE_PUBLIC_PATH,
     resolve: {
       alias: [
+        {
+          find: 'vue-i18n',
+          replacement: 'vue-i18n/dist/vue-i18n.cjs.js',
+        },
         // /@/xxxx => src/xxxx
         {
           find: /\/@\//,
@@ -39,7 +50,6 @@ export default function ({ command, mode }: ConfigEnv): UserConfigExport {
       ],
     },
     server: {
-      // port: 9088, // 端口
       host: true,
       hmr: true,
       proxy: createProxy(viteEnv),
@@ -50,6 +60,9 @@ export default function ({ command, mode }: ConfigEnv): UserConfigExport {
       preprocessorOptions: {
         scss: {},
       },
+    },
+    define: {
+      __APP_INFO__: JSON.stringify(__APP_INFO__),
     },
   };
 }

@@ -1,5 +1,5 @@
 {
-  "name": "wichat",
+  "name": "beautiful-chat-webSocket",
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
@@ -41,8 +41,8 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^9.1.1",
-    "husky": "8.0.1",
-    "lint-staged": "13.0.3",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.3",
     "mockjs": "^1.1.0",
     "postcss": "^8.4.14",
     "postcss-html": "1.4.1",

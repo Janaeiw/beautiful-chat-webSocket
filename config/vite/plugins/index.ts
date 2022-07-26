@@ -2,19 +2,20 @@
  * @name createVitePlugins
  * @description 封装plugins数组统一调用
  */
+
 import type { Plugin } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import vueJsx from '@vitejs/plugin-vue-jsx';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import { ConfigSvgIconsPlugin } from './svgIcons';
-import { AutoRegistryComponents } from './component';
+import { AutoRegistryComponents } from './autoComponents';
 import { AutoImportDeps } from './autoImport';
-import { configMockPlugin } from './mock';
+import { ConfigMockPlugin } from './mock';
 import { ConfigCompressPlugin } from './compress';
 import { ConfigPagesPlugin } from './pages';
 import { ConfigRestartPlugin } from './restart';
 import { ConfigProgressPlugin } from './progress';
-// import { ConfigEruda } from './eruda';
+import { ConfigEruda } from './eruda';
 import { ConfigStyleImport } from './styleImport';
 import { ConfigImageminPlugin } from './imagemin';
 import { ConfigVisualizerConfig } from './visualizer';
@@ -48,17 +49,16 @@ export function createVitePlugins(isBuild: boolean) {
   vitePlugins.push(ConfigProgressPlugin());
 
   //styleImport
-  vitePlugins.push(ConfigStyleImport());
+  vitePlugins.push(ConfigStyleImport(isBuild));
 
   // eruda
-  // vitePlugins.push(ConfigEruda());
+  vitePlugins.push(ConfigEruda());
+
+  // vite-plugin-mock
+  vitePlugins.push(ConfigMockPlugin(isBuild));
 
   // rollup-plugin-visualizer
   vitePlugins.push(ConfigVisualizerConfig());
-
-  // vite-plugin-mock
-  vitePlugins.push(configMockPlugin(isBuild));
-
   if (isBuild) {
     // vite-plugin-imagemin
     vitePlugins.push(ConfigImageminPlugin());
