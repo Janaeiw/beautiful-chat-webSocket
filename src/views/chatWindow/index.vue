@@ -1,9 +1,9 @@
 <!--
  * @Author: ZhongJunWei
  * @Date: 2022/06/30 18:10
- * @LastEditTime: 2022/07/25 17:18
+ * @LastEditTime: 2022/07/26 10:54
  * @LastEditors: Janaeiw
- * @FilePath: \wichat\src\views\chatWindow\index.vue
+ * @FilePath: \beautiful-chat-webSocket\src\views\chatWindow\index.vue
  * @Description: '聊天窗口'
 -->
 
@@ -97,6 +97,7 @@
   import { scrollToBottom } from '/@/utils/scroll';
   import { replaceSpace, validateAllSpace } from '/@/utils/validate';
   import { useUserStore } from '/@/store/modules/user';
+  import { useCookies } from '@vueuse/integrations/useCookies';
   import dayjs from 'dayjs';
   import TextMessage from './comps/TextMessage.vue';
 
@@ -182,7 +183,7 @@
       forbidClick: true,
       duration: 0,
     });
-    const uuid = userStore.getUserUuid;
+    const uuid = userStore.getUserUuid || useCookies().get('uuid');
     const url = `${clientWS}?session_key=${uuid}`;
     const webSocket = new WebSocket(url);
     if (!sessionClientWS.value) {

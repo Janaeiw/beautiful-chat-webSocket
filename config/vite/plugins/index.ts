@@ -51,20 +51,22 @@ export function createVitePlugins(isBuild: boolean) {
   //styleImport
   vitePlugins.push(ConfigStyleImport(isBuild));
 
-  // eruda
-  vitePlugins.push(ConfigEruda());
-
   // vite-plugin-mock
   vitePlugins.push(ConfigMockPlugin(isBuild));
 
   // rollup-plugin-visualizer
   vitePlugins.push(ConfigVisualizerConfig());
+
   if (isBuild) {
+    // eruda
+    vitePlugins.push(ConfigEruda());
+    
     // vite-plugin-imagemin
     vitePlugins.push(ConfigImageminPlugin());
 
     // vite-plugin-svg-icons
     vitePlugins.push(ConfigSvgIconsPlugin(isBuild));
   }
+
   return vitePlugins;
 }
