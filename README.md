@@ -1,6 +1,6 @@
 # beautiful-chat-webSocket
 
-基于 vue3 + vite + nut ui + sass + viewport 适配方案 +axios 封装，构建手机端模板脚手架
+基于 vue3 + vite + vantUI + sass + viewport 适配方案 +axios 封装，构建手机端模板脚手架
 
 ### Node 版本要求
 
@@ -11,7 +11,6 @@
 ### 启动项目
 
 ```bash
-
 git clone https://github.com/Janaeiw/beautiful-chat-webSocket.git
 
 cd beautiful-chat-webSocket
