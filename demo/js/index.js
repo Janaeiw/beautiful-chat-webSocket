@@ -1,13 +1,13 @@
 /*
  * @Author: Janaeiw
  * @Date: 2022/07/06 13:49
- * @LastEditTime: 2022/07/26 16:08
+ * @LastEditTime: 2022/08/12 16:03
  * @LastEditors: Janaeiw
- * @FilePath: \wichat\public\demo\js\index.js
+ * @FilePath: \beautiful-chat-webSocket\public\demo\js\index.js
  * @Description: 'wichat-jssdk'
  */
 
-const origin = 'https://shop.wiln.cn/m/wichat'
+const origin = 'https://janaeiw.github.io/beautiful-chat-webSocket'
 
 window.onload = function () {
   loadStyle(origin + '/demo/css/iconfont.css')
