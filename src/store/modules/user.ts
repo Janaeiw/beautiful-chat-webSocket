@@ -5,12 +5,12 @@ import { AnyObject } from '/#/global';
 
 const { VITE_TOKEN_KEY } = import.meta.env;
 const token = useCookies().get(VITE_TOKEN_KEY as string);
-const uuid = useCookies().get("uuid" as string);
+const sessionKey = useCookies().get('sessionKey' as string);
 
 interface StoreUser {
-  token?: string,
-  uuid?: string,
-  info?: AnyObject,
+  token?: string;
+  sessionKey?: string;
+  info?: AnyObject;
 }
 
 export const useUserStore = defineStore({
@@ -18,14 +18,14 @@ export const useUserStore = defineStore({
   state: (): StoreUser => ({
     token: token,
     info: {},
-    uuid: uuid,
+    sessionKey: sessionKey,
   }),
   getters: {
     getUserInfo(): any {
       return this.info || {};
     },
-    getUserUuid(): any {
-      return this.uuid || "";
+    getUserSessionKey(): any {
+      return this.sessionKey || '';
     },
   },
   actions: {
@@ -33,7 +33,7 @@ export const useUserStore = defineStore({
       return new Promise((resolve) => {
         this.info = info || {};
         resolve('success');
-      })
+      });
     },
     login(params: any) {
       return new Promise((resolve) => {
@@ -41,14 +41,14 @@ export const useUserStore = defineStore({
           this.setInfo(res.result);
           useCookies().set(VITE_TOKEN_KEY, res.result.author);
           resolve(res.value);
-        })
+        });
       });
     },
-    setUuid(uuid: String) {
+    setSessionKey(sessionKey: String) {
       return new Promise((resolve) => {
-        useCookies().set("uuid", uuid);
+        useCookies().set('sessionKey', sessionKey);
         resolve('success');
-      })
-    }
+      });
+    },
   },
 });

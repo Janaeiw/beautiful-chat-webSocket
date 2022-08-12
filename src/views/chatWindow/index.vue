@@ -1,7 +1,7 @@
 <!--
  * @Author: ZhongJunWei
  * @Date: 2022/06/30 18:10
- * @LastEditTime: 2022/07/26 16:13
+ * @LastEditTime: 2022/08/12 15:31
  * @LastEditors: Janaeiw
  * @FilePath: \beautiful-chat-webSocket\src\views\chatWindow\index.vue
  * @Description: '聊天窗口'
@@ -96,6 +96,7 @@
   import { Notify, Toast } from 'vant';
   import { scrollToBottom } from '/@/utils/scroll';
   import { replaceSpace, validateAllSpace } from '/@/utils/validate';
+  import { localGetItem } from '/@/utils/storage';
   import { useUserStore } from '/@/store/modules/user';
   import { useCookies } from '@vueuse/integrations/useCookies';
   import dayjs from 'dayjs';
@@ -113,20 +114,21 @@
   const $emit = defineEmits(['closeChat']);
 
   // 变量
+  const router = useRouter();
   const userStore = useUserStore(); // 用户pinia
   const clientWS =
-    import.meta.env.MODE == 'development' ? 'ws://192.168.3.109:9999/wichat/ws/customer' : 'wss://shop.wiln.cn/wichat/ws/customer'; // 客户聊天页面
+    import.meta.env.MODE == 'development' ? 'ws://192.168.3.122:9999/wichat/ws/customer' : 'wss://shop.wiln.cn/wichat/ws/customer'; // 客户聊天页面
   const avatarHref = 'https://joeschmoe.io/api/v1/random'; // 外部头像链接
 
   const sessionClientWS = ref<any>(null); // 会话客户
-  const sessionClientLockReconnect = ref<any>(false);
+  const sessionClientLockReconnect = ref<boolean>(false);
   const sessionUserInfo = ref<any>(null); // 会话用户信息
-  const loading = ref(false); // 会话列表加载
-  const finished = ref(false); // 会话列表-加载完成
-  const loadMore = ref(false); // 加载更多会话消息
-  const headFinished = ref(false); // 更多会话消息-加载完成
+  const loading = ref<boolean>(false); // 会话列表加载
+  const finished = ref<boolean>(false); // 会话列表-加载完成
+  const loadMore = ref<boolean>(false); // 加载更多会话消息
+  const headFinished = ref<boolean>(false); // 更多会话消息-加载完成
 
-  type messageType = {
+  type MessageType = {
     id?: Number;
     senderType?: String; // 发送者类型,可用值:USER,CUSTOMER
     avatar?: string; // 头像
@@ -136,12 +138,12 @@
     }; // 内容
     ctime?: Date | string; // 发送信息时间戳
   }[];
-  const messageList = ref<messageType>([]); // 会话消息列表
+  const messageList = ref<MessageType>([]); // 会话消息列表
 
-  type formsType = {
+  type FormsType = {
     content: string;
   };
-  const forms = ref<formsType>({
+  const forms = ref<FormsType>({
     content: '',
   });
 
@@ -159,15 +161,22 @@
     $emit('closeChat');
   };
 
+  type HeartCheckType = {
+    timeout: number;
+    timeoutObj: any;
+    reset: () => any;
+    start: (params: any) => void;
+  };
+
   // webSocket心跳机制-防止自动断开连接
-  const heartCheck = {
-    timeout: <any>60000, // 60秒
-    timeoutObj: <any>null,
+  const heartCheck: HeartCheckType = {
+    timeout: 60000, // 60秒
+    timeoutObj: null,
     reset: function () {
       clearInterval(this.timeoutObj);
       return this;
     },
-    start: function (webSocket: any) {
+    start: function (webSocket) {
       this.timeoutObj = setInterval(function () {
         // 这里发送一个心跳，后端收到后，返回一个心跳消息，
         // onmessage拿到返回的心跳就说明连接正常
@@ -183,8 +192,11 @@
       forbidClick: true,
       duration: 0,
     });
-    const uuid = userStore.getUserUuid || useCookies().get('uuid');
-    const url = `${clientWS}?session_key=${uuid}`;
+    const currentRouteQuery = router.currentRoute.value.query;
+    const sessionKey = userStore.getUserSessionKey || useCookies().get('sessionKey');
+    const shopKey = JSON.parse(localGetItem('Shop-Key') as string) || currentRouteQuery.shop_key || 'Aaa123';
+    const token = JSON.parse(localGetItem('token') as string) || '';
+    const url = `${clientWS}?session_key=${sessionKey}&shop_key=${shopKey}&token=${token}`;
     const webSocket = new WebSocket(url);
     if (!sessionClientWS.value) {
       sessionClientWS.value = webSocket;
@@ -194,7 +206,17 @@
       heartCheck.reset().start(webSocket);
     };
     webSocket.onerror = (_error) => {
-      if (sessionClientLockReconnect) {
+      if (sessionClientLockReconnect.value) {
+        return;
+      }
+      if (!shopKey) {
+        loading.value = false;
+        finished.value = true;
+        Toast.fail({
+          message: '缺少特定参数，连接失败，请刷新页面或联系管理员',
+          forbidClick: true,
+          duration: 4000,
+        });
         return;
       }
       // 没连接上会一直重连，设置延迟避免请求过多
@@ -218,7 +240,7 @@
         sessionUserInfo.value = parseData?.messageList?.find((item: any) => item.senderType == 'USER');
       }
       // 拼接会话消息列表
-      let newMessageList = <any>[];
+      let newMessageList: any[] = [];
       switch (parseData.position) {
         case 'HEAD': // 加载更多记录-unshift
           if (parseData?.messageList.length > 0) {
@@ -246,10 +268,10 @@
           scrollToBottom('van-list');
           break;
       }
+      loading.value = false;
+      finished.value = true;
+      Toast.clear();
     };
-    loading.value = false;
-    finished.value = true;
-    Toast.clear();
     // 兼容sdk其他环境下的初始化-不删此代码
     // if (finished.value) {
     //   return false;
@@ -323,18 +345,13 @@
   //   console.log(file);
   // };
 
-  // 监听自定义dom滚动到底部
-  const backBottom = () => {
-    scrollToBottom('van-list');
-  };
-
   watchEffect(() => {});
 
   // ref实例传递
   defineExpose({
     ...toRefs(data),
     fetchSessionClientBody,
-    backBottom,
+    scrollToBottom,
   });
 </script>
 <style scoped lang="scss">

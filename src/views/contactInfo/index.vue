@@ -1,7 +1,7 @@
 <!--
  * @Author: Janaeiw
  * @Date: 2022/07/12 14:08
- * @LastEditTime: 2022/07/18 09:59
+ * @LastEditTime: 2022/07/29 10:12
  * @LastEditors: Janaeiw
  * @FilePath: \wichat\src\views\contactInfo\index.vue
  * @Description: '联系资料表格'
@@ -57,12 +57,12 @@
   const router = useRouter();
   const userStore = useUserStore();
 
-  interface formsType {
+  interface FormsType {
     username?: string;
     email?: string;
     phone?: string;
   }
-  const forms = ref<formsType>({
+  const forms = ref<FormsType>({
     username: 'crazy kfc',
     email: 'yum@yum.com.cn',
     phone: '4008823823',

@@ -1,9 +1,9 @@
 <!--
  * @Author: ZhongJunWei
  * @Date: 2022/06/30 14:08
- * @LastEditTime: 2022/07/26 16:13
+ * @LastEditTime: 2022/07/29 10:04
  * @LastEditors: Janaeiw
- * @FilePath: \beautiful-chat-webSocket\src\views\launcher\index.vue
+ * @FilePath: \wichat\src\views\launcher\index.vue
  * @Description: '启动器'
 -->
 
@@ -42,9 +42,9 @@
 
   // 变量
   const userStore = useUserStore(); // 用户pinia
-  const isOpen = ref(false); // 是否显示聊天窗口
-  const isShowLauncher = ref(true); // 默认情况下显示启动器
-  const refChatWindow = ref(); // 获取聊天窗口的实例
+  const isOpen = ref<boolean>(false); // 是否显示聊天窗口
+  const isShowLauncher = ref<boolean>(true); // 默认情况下显示启动器
+  const refChatWindow = ref<any>(); // 获取聊天窗口的实例
 
   // 数据部分
   const data = reactive({});
@@ -80,12 +80,12 @@
 
   // 开启客服聊天窗口-初始化生成uuid
   const openChat = () => {
-    if (userStore.uuid) {
+    if (userStore.sessionKey) {
       isOpen.value = true;
-      refChatWindow.value.backBottom();
+      refChatWindow.value.scrollToBottom('van-list');
     } else {
-      const uuid = randomUuid(16, 16);
-      userStore.setUuid(uuid).then((_res) => {
+      const sessionKey = randomUuid(16, 16);
+      userStore.setSessionKey(sessionKey).then((_res) => {
         isOpen.value = true;
       });
     }
