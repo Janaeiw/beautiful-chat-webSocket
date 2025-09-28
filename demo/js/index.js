@@ -13,7 +13,7 @@ window.onload = function () {
   loadStyle(origin + '/demo/css/iconfont.css')
   loadStyle(origin + '/demo/css/index.css')
   loadScript(origin + '/demo/js/inertia.js')
-  loadScript('https://lf26-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.min.js', function () {
+  loadScript('https://code.jquery.com/jquery-3.7.1.min.js', function () {
     // 初始化加载
     $(function () {
       init();
