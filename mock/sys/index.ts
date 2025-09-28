@@ -14,4 +14,4 @@ export default [
 			return resultSuccess(data)
     },
   },
-] as MockMethod[];
+] as unknown as MockMethod[];
